@@ -35,6 +35,6 @@ include(core/tools/utils.cmake)
 
 # Add all directories needed to build the Idris apps
 add_subdirectory(core)
-add_subdirectory(libs)
+add_subdirectory(libs/libsel4-bare-metal)
 add_subdirectory(drivers)
 add_subdirectory(apps)
