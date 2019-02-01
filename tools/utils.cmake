@@ -25,11 +25,28 @@ function(assert value msg)
 endfunction()
 
 function(create_qemu_target target)
+    # Run the app in QEMU
     add_custom_target(qemu.${target} DEPENDS ${target})
     add_custom_command(
         TARGET qemu.${target}
         POST_BUILD
         COMMAND qemu-system-arm -M versatilepb -m 128M -nographic -kernel ${target}.bin
+        USES_TERMINAL
+    )
+    # Start qemu and open a gdbserver on TCP port 1234
+    add_custom_target(gdbserver.${target} DEPENDS ${target})
+    add_custom_command(
+        TARGET gdbserver.${target}
+        POST_BUILD
+        COMMAND qemu-system-arm -M versatilepb -m 128M -nographic -kernel ${target}.bin -s -S
+        USES_TERMINAL
+    )
+    # Start gdb and break on _start
+    add_custom_target(gdb.${target} DEPENDS ${target})
+    add_custom_command(
+        TARGET gdb.${target}
+        POST_BUILD
+        COMMAND ${CROSS_COMPILER_PREFIX}-gdb -ex 'target remote :1234' -ex 'b _start' ${target}
         USES_TERMINAL
     )
 endfunction()
