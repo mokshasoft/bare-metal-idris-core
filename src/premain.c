@@ -9,8 +9,10 @@
 #include <stdio.h>
 #include <malloc.h>
 
+extern int main();
+
 int premain(void)
 {
     printf("ARM bare-metal Idris\n");
-    return 0;
+    return main();
 }
