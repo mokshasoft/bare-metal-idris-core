@@ -15,8 +15,19 @@ cmake_minimum_required(VERSION 3.7.2)
 
 # Set generic build flags
 set(AARCH "-march=armv5t")
-set(CMAKE_ASM_FLAGS "--warn --fatal-warnings ${AARCH}")
-set(CMAKE_C_FLAGS "-Wall -O2 -nostdlib -nostartfiles -ffreestanding ${AARCH}")
+set(CMAKE_ASM_FLAGS "\
+    --warn\
+    --fatal-warnings\
+    ${AARCH}")
+set(CMAKE_C_FLAGS "\
+    -Wall\
+    -ffunction-sections\
+    -fdata-sections\
+    -O2\
+    -nostdlib\
+    -nostartfiles\
+    -ffreestanding\
+    ${AARCH}")
 
 # Include functions used to build Idris source
 include(core/tools/Idris.cmake)

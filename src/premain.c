@@ -6,13 +6,10 @@
  * See "LICENSE_BSD2.txt" for details.
  */
 
-#include <stdio.h>
-#include <malloc.h>
-
+// Defined by the Idris RTS library in idris_main.c
 extern int main();
 
 int premain(void)
 {
-    printf("ARM bare-metal Idris\n");
     return main();
 }
