@@ -94,16 +94,16 @@ function(idris_add_app app srcs)
     set_target_properties(${app} PROPERTIES COMPILE_FLAGS "-Wno-unused-label")
     target_link_libraries(
         ${app}
-        -nostdlib
+        -Wl,-u,_start,-e,_start
+        -Wl,-L,${LIBC} -Wl,-L,${LIBGCC}
+        -T ${CMAKE_SOURCE_DIR}/core/src/memmap
         -Wl,--start-group
         idris-rts-bare-metal
         ${app_link_lib}
-        -Wl,-L,${LIBC} -Wl,-L,${LIBGCC}
         c
         gcc
-        -Wl,-T,${CMAKE_SOURCE_DIR}/core/src/memmap
-        -Wl,--gc-sections
         -Wl,--end-group
+        -Wl,--gc-sections
     )
     gen_bin(${app})
     create_qemu_target(${app})
