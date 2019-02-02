@@ -7,12 +7,14 @@
 #
 
 function(create_qemu_target target)
+    assert(PLATFORM "Variable PLATFORM has to be set to use create_qemu_target")
+
     # Run the app in QEMU
     add_custom_target(qemu.${target} DEPENDS ${target})
     add_custom_command(
         TARGET qemu.${target}
         POST_BUILD
-        COMMAND qemu-system-arm -M versatilepb -m 128M -nographic -kernel ${target}.bin
+        COMMAND qemu-system-arm -M ${PLATFORM} -m 128M -nographic -kernel ${target}.bin
         USES_TERMINAL
     )
     # Start qemu and open a gdbserver on TCP port 1234
@@ -20,7 +22,7 @@ function(create_qemu_target target)
     add_custom_command(
         TARGET gdbserver.${target}
         POST_BUILD
-        COMMAND qemu-system-arm -M versatilepb -m 128M -nographic -kernel ${target}.bin -s -S
+        COMMAND qemu-system-arm -M ${PLATFORM} -m 128M -nographic -kernel ${target}.bin -s -S
         USES_TERMINAL
     )
     # Start gdb and break on _start
