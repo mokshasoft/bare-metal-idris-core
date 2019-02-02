@@ -112,6 +112,6 @@ function(idris_add_app app srcs)
         gcc
         -Wl,--gc-sections
     )
-    gen_bin(${app})
+    generate_binary(${app})
     create_qemu_target(${app})
 endfunction()

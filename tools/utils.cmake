@@ -10,7 +10,7 @@
 #
 # It would be nicer if this could fit in the toolchain file instead, since then
 # no modifications to the app CMakeLists.txt would be necessary.
-function(gen_bin target)
+function(generate_binary target)
     add_custom_command(
         TARGET ${target}
         POST_BUILD
