@@ -80,29 +80,36 @@ function(idris_add_app app srcs)
 
     enable_language(C ASM)
 
-    # Compile and link everything to a static binary
-    add_executable(${app} EXCLUDE_FROM_ALL
-        ${CMAKE_SOURCE_DIR}/core/src/boot.s
-        ${CMAKE_SOURCE_DIR}/core/src/rw.s
-        ${CMAKE_SOURCE_DIR}/core/src/premain.c
-        ${CMAKE_SOURCE_DIR}/core/src/newlib.c
+    # Compile Idris generated main.c into a library
+    add_library(${app}-main EXCLUDE_FROM_ALL
         main.c
     )
-    add_dependencies(${app} ${app}-idr2c)
+    target_link_libraries(
+        ${app}-main
+        idris-rts-bare-metal
+        core
+    )
 
     # Ignore warning from unused loop label in generated code in Idris RTS
-    set_target_properties(${app} PROPERTIES COMPILE_FLAGS "-Wno-unused-label")
+    set_target_properties(${app}-main PROPERTIES COMPILE_FLAGS "-Wno-unused-label")
+
+    # Compile and link everything to a static binary
+    add_executable(${app} EXCLUDE_FROM_ALL
+        # add_executable needs at least one file
+        ${CMAKE_SOURCE_DIR}/core/src/dummy.c
+    )
+
     target_link_libraries(
         ${app}
         -Wl,-u,_start,-e,_start
         -Wl,-L,${LIBC} -Wl,-L,${LIBGCC}
         -T ${CMAKE_SOURCE_DIR}/core/src/memmap
-        -Wl,--start-group
+        core
         idris-rts-bare-metal
+        ${app}-main
         ${app_link_lib}
         c
         gcc
-        -Wl,--end-group
         -Wl,--gc-sections
     )
     gen_bin(${app})

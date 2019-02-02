@@ -9,6 +9,24 @@
 cmake_minimum_required(VERSION 3.7.2)
 
 #
+# libcore is needed to boot the system and start the Idris RTS.
+#
+
+set(LIB core)
+project(${LIB})
+enable_language(C ASM)
+
+# boot.s needs to be first in order for the linking to be done correctly
+set(static
+    src/boot.s
+    src/rw.s
+    src/newlib.c
+    src/premain.c
+)
+
+add_library(${LIB} EXCLUDE_FROM_ALL ${static})
+
+#
 # The coreapp is the simplest bare-metal app using newlib. It is not needed
 # by the Idris apps.
 #
