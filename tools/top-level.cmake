@@ -17,6 +17,7 @@ cmake_minimum_required(VERSION 3.7.2)
 include(core/tools/Idris.cmake)
 include(core/tools/utils.cmake)
 include(core/tools/platforms.cmake)
+include(core/tools/qemu.cmake)
 
 # Set platform specific build flags
 set_platform_build_flags()
