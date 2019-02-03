@@ -11,10 +11,11 @@
 # It would be nicer if this could fit in the toolchain file instead, since then
 # no modifications to the app CMakeLists.txt would be necessary.
 function(generate_binary target)
+    file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/images)
     add_custom_command(
         TARGET ${target}
         POST_BUILD
-        COMMAND ${CMAKE_OBJCOPY} -O binary ${target} ${target}.bin
+        COMMAND ${CMAKE_OBJCOPY} -O binary ${target} ${CMAKE_BINARY_DIR}/images/${target}.bin
     )
 endfunction()
 

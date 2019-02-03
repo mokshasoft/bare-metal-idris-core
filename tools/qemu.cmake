@@ -14,7 +14,7 @@ function(create_qemu_target target)
     add_custom_command(
         TARGET qemu.${target}
         POST_BUILD
-        COMMAND qemu-system-arm -M ${PLATFORM} -m 128M -nographic -kernel ${target}.bin
+        COMMAND qemu-system-arm -M ${PLATFORM} -m 128M -nographic -kernel ${CMAKE_BINARY_DIR}/images/${target}.bin
         USES_TERMINAL
     )
     # Start qemu and open a gdbserver on TCP port 1234
@@ -22,7 +22,7 @@ function(create_qemu_target target)
     add_custom_command(
         TARGET gdbserver.${target}
         POST_BUILD
-        COMMAND qemu-system-arm -M ${PLATFORM} -m 128M -nographic -kernel ${target}.bin -s -S
+        COMMAND qemu-system-arm -M ${PLATFORM} -m 128M -nographic -kernel ${CMAKE_BINARY_DIR}/images/${target}.bin -s -S
         USES_TERMINAL
     )
     # Start gdb and break on _start
