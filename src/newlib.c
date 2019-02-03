@@ -7,16 +7,10 @@
  */
 
 #include <sys/fcntl.h>
+#include "platform.h"
 
 extern int __HeapBase;
 static unsigned char *heap = (unsigned char *)&__HeapBase;
-
-void _put32(unsigned int, unsigned int);
-
-void uart_putc(char c)
-{
-    _put32(0x101f1000, c);
-}
 
 int _write(
     int file,

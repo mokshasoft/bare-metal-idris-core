@@ -21,10 +21,12 @@ set(static
     src/boot.s
     src/rw.s
     src/newlib.c
+    src/platforms/${PLATFORM}/platform.c
     src/premain.c
 )
 
 add_library(${LIB} EXCLUDE_FROM_ALL ${static})
+target_include_directories(${LIB} PUBLIC src/include)
 
 #
 # The coreapp is the simplest bare-metal app using newlib. It is not needed
@@ -40,6 +42,7 @@ set(static
     src/boot.s
     src/rw.s
     src/newlib.c
+    src/platforms/${PLATFORM}/platform.c
     src/core-app.c
 )
 
@@ -52,6 +55,7 @@ target_link_libraries(
     gcc
     -Wl,--gc-sections
 )
+target_include_directories(${APP} PUBLIC src/include)
 string(APPEND CMAKE_EXE_LINKER_FLAGS " -T ${CMAKE_CURRENT_SOURCE_DIR}/src/memmap")
 generate_binary(${APP})
 create_qemu_target(${APP})
