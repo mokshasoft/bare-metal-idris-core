@@ -6,6 +6,10 @@
 # See "LICENSE_BSD2.txt" for details.
 #
 
+# Define all platforms
+set(pl_versatilepb versatilepb)
+set(pl_beaglebone beaglebone)
+
 # Set generic flags needed for all platforms
 macro(set_generic_build_flags)
     set(CMAKE_ASM_FLAGS "\
@@ -27,12 +31,12 @@ endmacro()
 macro(set_platform_build_flags)
     # Set default platform if not specified
     if(NOT PLATFORM)
-        set(PLATFORM "versatilepb")
+        set(PLATFORM ${pl_versatilepb})
         message(STATUS "Using default value for PLATFORM (${PLATFORM})")
     endif()
 
     # Set platform specific flags and build variables
-    if("${PLATFORM}" STREQUAL "versatilepb")
+    if("${PLATFORM}" STREQUAL ${pl_versatilepb})
         set(AARCH "-march=armv5t")
     endif()
 endmacro()
