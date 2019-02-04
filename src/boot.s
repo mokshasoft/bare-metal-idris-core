@@ -8,10 +8,7 @@
 
 .global _start
 _start:
-    b reset
-
-reset:
-    mov sp,#0x20000
+    mov sp,#0x20000 @ set stack pointer
     bl premain
 hang:
     b hang
