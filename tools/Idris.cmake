@@ -88,6 +88,7 @@ function(idris_add_app app srcs)
         ${app}-main
         idris-rts-bare-metal
         core
+        ${app_link_lib}
     )
 
     # Ignore warning from unused loop label in generated code in Idris RTS
