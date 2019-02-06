@@ -104,7 +104,7 @@ function(idris_add_app app srcs)
         ${app}
         -Wl,-u,_start,-e,_start
         -Wl,-L,${LIBC} -Wl,-L,${LIBGCC}
-        -T ${CMAKE_SOURCE_DIR}/core/src/memmap.ld
+        -T ${CMAKE_SOURCE_DIR}/core/src/platforms/${PLATFORM}/memmap.ld
         core
         idris-rts-bare-metal
         ${app}-main

@@ -51,7 +51,7 @@ target_link_libraries(
     ${APP}
     -Wl,-u,_start,-e,_start
     -Wl,-L,${LIBC} -Wl,-L,${LIBGCC}
-    -T ${CMAKE_CURRENT_SOURCE_DIR}/src/memmap.ld
+    -T ${CMAKE_CURRENT_SOURCE_DIR}/src/platforms/${PLATFORM}/memmap.ld
     c
     gcc
     -Wl,--gc-sections
