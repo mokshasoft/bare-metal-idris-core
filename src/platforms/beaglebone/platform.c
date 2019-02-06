@@ -10,5 +10,8 @@ void _put32(unsigned int, unsigned int);
 
 void uart_putc(char c)
 {
+    if (c == '\n') {
+        _put32(0x44E09000, '\r');
+    }
     _put32(0x44E09000, c);
 }
