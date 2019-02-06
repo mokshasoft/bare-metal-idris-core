@@ -6,21 +6,22 @@
  * See "LICENSE_BSD2.txt" for details.
  */
 
-/* memmap */
 MEMORY
 {
     ram  : ORIGIN = 0x00010000, LENGTH = 0x10000000
 }
 
+/* Set heap to 512 KB (0x80000) */
+_heap_size = 0x80000;
+
 SECTIONS
 {
    .text : { *(.text*) } > ram
    .bss  : { *(.text*) } > ram
-   /* create a 2KB (0x800) heap */
    .heap :
     {
         __HeapBase = .;
         *(.heap*)
-        . = . + 0x80000;
+        . = . + _heap_size;
     } > ram
 }

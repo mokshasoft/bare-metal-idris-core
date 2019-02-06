@@ -56,6 +56,6 @@ target_link_libraries(
     -Wl,--gc-sections
 )
 target_include_directories(${APP} PUBLIC src/include)
-string(APPEND CMAKE_EXE_LINKER_FLAGS " -T ${CMAKE_CURRENT_SOURCE_DIR}/src/memmap")
+string(APPEND CMAKE_EXE_LINKER_FLAGS " -T ${CMAKE_CURRENT_SOURCE_DIR}/src/memmap.ld")
 generate_binary(${APP})
 create_qemu_target(${APP})
