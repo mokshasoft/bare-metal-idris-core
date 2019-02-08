@@ -19,8 +19,7 @@ set(LIB core)
 project(${LIB})
 enable_language(C ASM)
 
-# boot.s needs to be first in order for the linking to be done correctly
-set(static
+file(GLOB static
     src/platforms/${PLATFORM}/boot.s
     src/rw.s
     src/newlib.c
