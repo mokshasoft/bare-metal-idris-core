@@ -34,15 +34,9 @@ target_include_directories(${LIB} PUBLIC src/include)
 #
 
 set(APP coreapp)
-project(${APP})
-enable_language(C ASM)
+project(${APP} C)
 
-# boot.s needs to be first in order for the linking to be done correctly
-set(static
-    src/platforms/${PLATFORM}/boot.s
-    src/rw.s
-    src/newlib.c
-    src/platforms/${PLATFORM}/platform.c
+file(GLOB static
     src/core-app.c
 )
 
@@ -51,11 +45,13 @@ target_link_libraries(
     ${APP}
     -Wl,-u,_start,-e,_start
     -Wl,-L,${LIBC} -Wl,-L,${LIBGCC}
-    -T ${CMAKE_CURRENT_SOURCE_DIR}/src/platforms/${PLATFORM}/memmap.ld
+    -T ${CMAKE_SOURCE_DIR}/core/src/platforms/${PLATFORM}/memmap.ld
+    -Wl,--start-group
+    core
     c
     gcc
+    -Wl,--end-group
     -Wl,--gc-sections
 )
-target_include_directories(${APP} PUBLIC src/include)
 generate_binary(${APP})
 create_qemu_target(${APP})

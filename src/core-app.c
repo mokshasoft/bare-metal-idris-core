@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <malloc.h>
 
-int premain(void)
+int main(void)
 {
     printf("ARM bare-metal newlib\n");
     int *ptr1 = malloc(100);
