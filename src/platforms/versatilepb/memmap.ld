@@ -16,6 +16,10 @@ _heap_size = 0x80000;
 
 SECTIONS
 {
+   .startcode :
+    {
+        *boot.s.obj (.text)
+    } > ram
    .text : { *(.text*) } > ram
    .bss  : { *(.text*) } > ram
    .heap :
