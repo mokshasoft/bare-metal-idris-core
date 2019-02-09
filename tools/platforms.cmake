@@ -12,23 +12,35 @@ set(pl_beaglebone beaglebone)
 
 # Set generic flags needed for all platforms
 macro(set_generic_build_flags)
-    set(CMAKE_EXE_LINKER_FLAGS "\
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}\
         -static\
         -u _start -e _start\
         -L ${LIBC} -L ${LIBGCC}")
-    set(CMAKE_ASM_FLAGS "\
-        --warn\
-        --fatal-warnings\
-        ${AARCH}")
-    set(CMAKE_C_FLAGS "\
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}\
         -Wall\
         -ffunction-sections\
         -fdata-sections\
         -O2\
         -nostdlib\
-        -nostartfiles\
-        -ffreestanding\
-        ${AARCH}")
+        -ffreestanding")
+endmacro()
+
+# Set toolchain specific build flags
+macro(set_toolchain_build_flags)
+    if(GccToolchain)
+        set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS}\
+            --warn\
+            --fatal-warnings\
+            ${AARCH}")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}\
+            -nostartfiles\
+            ${AARCH}")
+    elseif(ClangGccToolchain)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}\
+            -m32")
+    else()
+        message(FATAL_ERROR "No toolchain defined")
+    endif()
 endmacro()
 
 # Set platform specific build flags

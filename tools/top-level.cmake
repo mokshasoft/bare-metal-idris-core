@@ -25,6 +25,9 @@ set_platform_build_flags()
 # Set generic flags needed for all platforms
 set_generic_build_flags()
 
+# Set toolchain specific build flags
+set_toolchain_build_flags()
+
 # Add all directories needed to build the Idris apps
 add_subdirectory(core)
 add_subdirectory(libs/idris-rts)
