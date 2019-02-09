@@ -12,6 +12,10 @@ set(pl_beaglebone beaglebone)
 
 # Set generic flags needed for all platforms
 macro(set_generic_build_flags)
+    set(CMAKE_EXE_LINKER_FLAGS "\
+        -static\
+        -u _start -e _start\
+        -L ${LIBC} -L ${LIBGCC}")
     set(CMAKE_ASM_FLAGS "\
         --warn\
         --fatal-warnings\

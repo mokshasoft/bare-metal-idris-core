@@ -23,15 +23,9 @@ file(GLOB static
 add_executable(${APP} EXCLUDE_FROM_ALL ${static})
 target_link_libraries(
     ${APP}
-    -Wl,-u,_start,-e,_start
-    -Wl,-L,${LIBC} -Wl,-L,${LIBGCC}
     -T ${CMAKE_SOURCE_DIR}/core/src/platforms/${PLATFORM}/memmap.ld
-    -Wl,--start-group
     core
-    c
-    gcc
-    -Wl,--end-group
-    -Wl,--gc-sections
+    --gc-sections
 )
 generate_binary(${APP})
 create_qemu_target(${APP})
@@ -51,15 +45,13 @@ file(GLOB static
 add_executable(${APP} EXCLUDE_FROM_ALL ${static})
 target_link_libraries(
     ${APP}
-    -Wl,-u,_start,-e,_start
-    -Wl,-L,${LIBC} -Wl,-L,${LIBGCC}
     -T ${CMAKE_SOURCE_DIR}/core/src/platforms/${PLATFORM}/memmap.ld
-    -Wl,--start-group
+    --start-group
     core
     c
     gcc
-    -Wl,--end-group
-    -Wl,--gc-sections
+    --end-group
+    --gc-sections
 )
 generate_binary(${APP})
 create_qemu_target(${APP})

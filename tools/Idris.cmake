@@ -102,16 +102,16 @@ function(idris_add_app app srcs)
 
     target_link_libraries(
         ${app}
-        -Wl,-u,_start,-e,_start
-        -Wl,-L,${LIBC} -Wl,-L,${LIBGCC}
         -T ${CMAKE_SOURCE_DIR}/core/src/platforms/${PLATFORM}/memmap.ld
+        --start-group
         core
         idris-rts-bare-metal
         ${app}-main
         ${app_link_lib}
         c
         gcc
-        -Wl,--gc-sections
+        --end-group
+        --gc-sections
     )
     generate_binary(${app})
     create_qemu_target(${app})
