@@ -18,12 +18,24 @@ SECTIONS
 {
    .startcode :
     {
+        . = ALIGN(4);
         *boot.s.obj (.text)
     } > ram
-   .text : { *(.text*) } > ram
-   .bss  : { *(.text*) } > ram
+   .text :
+    {
+        . = ALIGN(4);
+        *(.text*)
+    } > ram
+   .bss :
+    {
+        . = ALIGN(4);
+        __BssStart = .;
+        *(.bss*)
+        __BssEnd = .;
+    } > ram
    .heap :
     {
+        . = ALIGN(4);
         __HeapBase = .;
         *(.heap*)
         . = . + _heap_size;
