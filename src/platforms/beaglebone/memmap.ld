@@ -29,7 +29,9 @@ SECTIONS
    .bss :
     {
         . = ALIGN(4);
-        *(.text*)
+        __BssStart = .;
+        *(.bss*)
+        __BssEnd = .;
     } > ram
    .heap :
     {
