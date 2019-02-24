@@ -47,7 +47,7 @@ function(idris_add_app app srcs)
         if("${mod_inc_dir}" STREQUAL "")
             message(FATAL_ERROR "Did not find Idris module ${mod}")
         else()
-            set(app_inc_dirs ${app_inc_dirs} -i ${mod_inc_dir})
+            set(app_inc_dirs ${app_inc_dirs} -i ${mod_inc_dir} --sourcepath ${mod_inc_dir})
             set(app_dep_files ${app_dep_files} ${mod_dep_files})
         endif()
         # get all dependent libraries
