@@ -8,25 +8,23 @@
 
 cmake_minimum_required(VERSION 3.7.2)
 
-function(idris_add_module module files)
-    set_property(GLOBAL PROPERTY idris_module_include_dir_${module} ${CMAKE_CURRENT_SOURCE_DIR})
+function(idris_add_module module ipkg files)
     set_property(GLOBAL PROPERTY idris_module_dependent_files_${module} ${files})
+    add_custom_target(${module} DEPENDS ${ipkg} ${files})
+    add_custom_command(
+        TARGET ${module}
+        PRE_BUILD
+        COMMAND idris --install ${ipkg}
+	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
 endfunction()
 
-function(idris_module_link_libraries module libraries)
+function(idris_link_libraries module libraries)
     # get the libraries
     set(libs ${ARGV})
     list(REMOVE_AT libs 0)
     # store libraries
     set_property(GLOBAL PROPERTY idris_module_link_libraries_${module} ${libs})
-endfunction()
-
-function(idris_app_link_libraries app libraries)
-    # get the libraries
-    set(libs ${ARGV})
-    list(REMOVE_AT libs 0)
-    # store libraries
-    set_property(GLOBAL PROPERTY idris_app_link_libraries_${app} ${libs})
 endfunction()
 
 function(idris_app_link_modules app modules)
@@ -38,47 +36,38 @@ function(idris_app_link_modules app modules)
 endfunction()
 
 function(idris_add_app app srcs)
-    # find and add all include directories from the app modules
-    get_property(app_inc_mods GLOBAL PROPERTY idris_app_link_modules_${app})
-    foreach(mod ${app_inc_mods})
-        # get dependent files and their root folders
-        get_property(mod_inc_dir GLOBAL PROPERTY idris_module_include_dir_${mod})
-        get_property(mod_dep_files GLOBAL PROPERTY idris_module_dependent_files_${mod})
-        if("${mod_inc_dir}" STREQUAL "")
-            message(FATAL_ERROR "Did not find Idris module ${mod}")
-        else()
-            set(app_inc_dirs ${app_inc_dirs} -i ${mod_inc_dir} --sourcepath ${mod_inc_dir})
-            set(app_dep_files ${app_dep_files} ${mod_dep_files})
-        endif()
-        # get all dependent libraries
-        get_property(mod_link_lib GLOBAL PROPERTY idris_module_link_libraries_${mod})
-        if(NOT "${mod_link_lib}" STREQUAL "")
-            set(app_link_lib ${app_link_lib} ${mod_link_lib})
+    # go through all dependent modules and find their native dependencies
+    get_property(app_modules GLOBAL PROPERTY idris_app_link_modules_${app})
+    foreach(mod ${app_modules})
+        # get the modules dependent native libraries
+        get_property(libs GLOBAL PROPERTY idris_module_link_libraries_${mod})
+        if(NOT "${libs}" STREQUAL "")
+            set(app_libs ${app_libs} ${libs})
         endif()
     endforeach(mod)
 
-    # get all the apps dependent libraries
-    get_property(link_lib GLOBAL PROPERTY idris_app_link_libraries_${app})
-    if(NOT "${link_lib}" STREQUAL "")
-        set(app_link_lib ${app_link_lib} ${link_lib})
+    # generate package command, e.g -p drivers
+    set(app_link ${app_modules})
+    list(TRANSFORM app_link PREPEND "-p")
+
+    # get the apps dependent native libraries
+    get_property(libs GLOBAL PROPERTY idris_module_link_libraries_${app})
+    if(NOT "${libs}" STREQUAL "")
+        set(app_libs ${app_libs} ${libs})
     endif()
 
     # add a target that transcompiles Idris to C
     add_custom_command(
         OUTPUT main.c
         COMMAND idris
-            -i ${CMAKE_CURRENT_SOURCE_DIR}
-            ${app_inc_dirs}
-            --sourcepath ${CMAKE_CURRENT_SOURCE_DIR}
+            ${app_link}
             --codegen C
             --codegenonly
             -o main.c
             ${srcs}
-        DEPENDS ${srcs} ${app_dep_files}
+        DEPENDS ${srcs} ${app_modules}
     )
     add_custom_target(${app}-idr2c DEPENDS main.c)
-
-    enable_language(C ASM)
 
     # Compile Idris generated main.c into a library
     add_library(${app}-main EXCLUDE_FROM_ALL
@@ -88,7 +77,7 @@ function(idris_add_app app srcs)
         ${app}-main
         idris-rts-bare-metal
         core
-        ${app_link_lib}
+        ${app_libs}
     )
 
     # Ignore warning from unused loop label in generated code in Idris RTS
@@ -107,7 +96,7 @@ function(idris_add_app app srcs)
         core
         idris-rts-bare-metal
         ${app}-main
-        ${app_link_lib}
+        ${app_libs}
         c
         gcc
         --end-group
