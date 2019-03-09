@@ -19,6 +19,9 @@ include(core/cmake/utils.cmake)
 include(core/cmake/platforms.cmake)
 include(core/cmake/qemu.cmake)
 
+# Check the Idris version
+test_idris_version(1.3.1)
+
 # Set platform specific build flags
 set_platform_build_flags()
 

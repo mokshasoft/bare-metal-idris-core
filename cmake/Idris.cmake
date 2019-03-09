@@ -8,6 +8,21 @@
 
 cmake_minimum_required(VERSION 3.7.2)
 
+function(test_idris_version version)
+    # Test that the Idris version is greater than 1.3.1
+    execute_process(
+        COMMAND idris --version
+        OUTPUT_VARIABLE IDRIS_CMD_VERSION
+    )
+    string(
+        REGEX MATCH [0-9]+\.[0-9]+.[0-9]+
+        IDRIS_VERSION ${IDRIS_CMD_VERSION}
+    )
+    if(${IDRIS_VERSION} VERSION_LESS ${version})
+        message(FATAL_ERROR "This project needs at least Idris version ${version}")
+    endif()
+endfunction()
+
 function(idris_add_module module ipkg files)
     set_property(GLOBAL PROPERTY idris_module_dependent_files_${module} ${files})
     add_custom_target(${module} DEPENDS ${ipkg} ${files})
