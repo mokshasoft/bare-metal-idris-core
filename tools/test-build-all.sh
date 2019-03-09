@@ -13,7 +13,7 @@ for plat in ${PLATFORMS} ; do
     # Configure and build
     (cd $dir &&
      echo $dir &&
-     cmake -G Ninja -DCMAKE_TOOLCHAIN_FILE=../core/tools/$toolc-toolchain.cmake -DPLATFORM=$plat .. &&
+     cmake -G Ninja -DCMAKE_TOOLCHAIN_FILE=../core/cmake/$toolc-toolchain.cmake -DPLATFORM=$plat .. &&
      ninja $APPS
     )
     # Check if build passed
