@@ -24,7 +24,6 @@ function(test_idris_version version)
 endfunction()
 
 function(idris_add_module module ipkg files)
-    set_property(GLOBAL PROPERTY idris_module_dependent_files_${module} ${files})
     add_custom_target(${module} DEPENDS ${ipkg} ${files})
     add_custom_command(
         TARGET ${module}
