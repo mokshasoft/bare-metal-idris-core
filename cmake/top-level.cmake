@@ -6,6 +6,8 @@
 # See "LICENSE_BSD2.txt" for details.
 #
 
+project(BareMetalIdris)
+
 cmake_minimum_required(VERSION 3.7.2)
 
 #
