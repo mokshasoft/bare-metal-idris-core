@@ -9,7 +9,28 @@
 cmake_minimum_required(VERSION 3.7.2)
 
 #
-# The native-hello-world is the simplest bare-metal app. It is not needed
+# The native-led-blink is a simple bare-metal app. It is not needed
+# by the Idris apps.
+#
+
+set(APP native-led-blink)
+project(${APP} C)
+
+file(GLOB static
+    native-led-blink.c
+)
+
+add_executable(${APP} EXCLUDE_FROM_ALL ${static})
+target_link_libraries(
+    ${APP}
+    -T ${CMAKE_SOURCE_DIR}/core/src/platforms/${PLATFORM}/memmap.ld
+    core
+    --gc-sections
+)
+generate_binary(${APP})
+
+#
+# The native-hello-world is a simple bare-metal app. It is not needed
 # by the Idris apps.
 #
 
@@ -31,7 +52,7 @@ generate_binary(${APP})
 create_qemu_target(${APP})
 
 #
-# The native-newlib is the simplest bare-metal app using newlib. It is not needed
+# The native-newlib is a simple bare-metal app using newlib. It is not needed
 # by the Idris apps.
 #
 
