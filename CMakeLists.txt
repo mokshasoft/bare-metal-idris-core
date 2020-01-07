@@ -10,6 +10,7 @@ cmake_minimum_required(VERSION 3.7.2)
 
 # Add native apps that only depend on libcore that tests basic functionality
 add_subdirectory(src/native)
+add_subdirectory(src/starterwarefree)
 
 #
 # libcore is needed to boot the system and start the Idris RTS.

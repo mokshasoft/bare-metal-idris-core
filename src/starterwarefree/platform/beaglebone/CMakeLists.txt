@@ -8,19 +8,20 @@
 
 cmake_minimum_required(VERSION 3.7.2)
 
-project(platform C)
+set(LIB stwf-platform)
+project(${LIB} C)
 
 file(GLOB static
     *.c
 )
 
-add_library(platform EXCLUDE_FROM_ALL ${static})
+add_library(${LIB} EXCLUDE_FROM_ALL ${static})
 target_link_libraries(
-    platform
-    drivers
-    utils
+    ${LIB}
+    stwf-drivers
+    stwf-utils
 )
-target_include_directories(platform PUBLIC
+target_include_directories(${LIB} PUBLIC
     ${ROOT_PATH}/include/hw
     ${ROOT_PATH}/include/${TARGET}/${DEVICE}
 )

@@ -8,19 +8,19 @@
 
 cmake_minimum_required(VERSION 3.7.2)
 
-project(drivers C)
+set(LIB stwf-drivers)
+project(${LIB} C)
 
 file(GLOB static
     *.c
 )
 
-add_library(drivers EXCLUDE_FROM_ALL ${static})
+add_library(${LIB} EXCLUDE_FROM_ALL ${static})
 target_link_libraries(
-    drivers
-    usblib
-    system_config
-    utils
+    ${LIB}
+    stwf-utils
 )
-target_include_directories(drivers PUBLIC
+target_include_directories(${LIB} PUBLIC
+    ${ROOT_PATH}/include/hw
     include
 )

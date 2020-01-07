@@ -8,7 +8,7 @@
 
 cmake_minimum_required(VERSION 3.7.2)
 
-include(build/CMake/utils.cmake)
+project(StarterWareFree)
 
 # Configuration options
 
@@ -32,17 +32,6 @@ if(NOT BOOT)
     message(STATUS "Using default value for BOOT (${BOOT})")
 endif()
 
-if(NOT IMG_LOAD_ADDR)
-    set(IMG_LOAD_ADDR "0x80000000")
-    message(STATUS "Using default value for IMG_LOAD_ADDR (${IMG_LOAD_ADDR})")
-endif()
-
-if(NOT BUILD_TYPE)
-    set(BUILD_TYPE "release")
-    message(STATUS "Using default value for BUILD_TYPE (${BUILD_TYPE})")
-    message(STATUS "  Available BUILD_TYPE values: release, debug")
-endif()
-
 # Setup build variables
 
 set(ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
@@ -51,19 +40,6 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D${EVM}")
 
 # Add library components
 
-add_subdirectory(bootloader)
 add_subdirectory(drivers)
 add_subdirectory(platform/${EVM})
-add_subdirectory(system_config/${TARGET})
 add_subdirectory(utils)
-add_subdirectory(mmcsdlib)
-add_subdirectory(grlib)
-add_subdirectory(usblib)
-
-# Add third party libs
-
-add_subdirectory(third_party/fatfs)
-
-# Add example apps
-
-add_subdirectory(examples/${EVM})

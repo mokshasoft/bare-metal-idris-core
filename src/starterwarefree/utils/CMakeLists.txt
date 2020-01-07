@@ -8,13 +8,14 @@
 
 cmake_minimum_required(VERSION 3.7.2)
 
-project(utils C)
+set(LIB stwf-utils)
+project(${LIB} C)
 
 file(GLOB static
     *.c
 )
 
-add_library(utils EXCLUDE_FROM_ALL ${static})
-target_include_directories(utils PUBLIC
+add_library(${LIB} EXCLUDE_FROM_ALL ${static})
+target_include_directories(${LIB} PUBLIC
     include
 )
