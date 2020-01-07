@@ -19,8 +19,8 @@ extern unsigned int _get32(unsigned int);
 #define GPIO_OE              0x134
 #define GPIO_CLEARDATAOUT    0x190
 #define GPIO_SETDATAOUT      0x194
-#define SOC_PRCM_REGS        0x44E00000
-#define SOC_GPIO_1_REGS      0x4804C000
+//#define SOC_PRCM_REGS        0x44E00000
+//#define SOC_GPIO_1_REGS      0x4804C000
 
 // Busy wait time
 #define TIME 50000000
@@ -54,8 +54,10 @@ int main(void)
     i = 0;
     for (;;) {
         // Blink once
+        ConsoleUtilsPrintf("LED on\n");
         _put32(SOC_GPIO_1_REGS + GPIO_SETDATAOUT, (1 << i) << 21);
         busywait(TIME);
+        ConsoleUtilsPrintf("LED off\n");
         _put32(SOC_GPIO_1_REGS + GPIO_CLEARDATAOUT, (1 << i) << 21);
         busywait(TIME);
         // Move on to next LED
