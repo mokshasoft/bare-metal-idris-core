@@ -6,6 +6,10 @@
  * See "LICENSE_BSD2.txt" for details.
  */
 
+#include "consoleUtils.h"
+#include "soc_AM335x.h"
+#include "beaglebone.h"
+
 extern void _put32(unsigned int, unsigned int);
 extern unsigned int _get32(unsigned int);
 
@@ -37,6 +41,14 @@ int main(void)
     i = _get32(SOC_GPIO_1_REGS + GPIO_OE);
     i &= ~(0xF << 21);
     _put32(SOC_GPIO_1_REGS + GPIO_OE, i);
+
+    /* Initialize the UART console */
+    ConsoleUtilsInit();
+
+    /* Select the console type based on compile time check */
+    ConsoleUtilsSetType(CONSOLE_UART);
+
+    ConsoleUtilsPrintf("Setup UART logging\n");
 
     // Blick LEDs forever
     i = 0;

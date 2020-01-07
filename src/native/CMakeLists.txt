@@ -24,7 +24,12 @@ add_executable(${APP} EXCLUDE_FROM_ALL ${static})
 target_link_libraries(
     ${APP}
     -T ${CMAKE_SOURCE_DIR}/core/src/platforms/${PLATFORM}/memmap.ld
+    --start-group
+    gcc
     core
+    stwf-drivers
+    stwf-utils
+    stwf-platform
     --gc-sections
 )
 generate_binary(${APP})

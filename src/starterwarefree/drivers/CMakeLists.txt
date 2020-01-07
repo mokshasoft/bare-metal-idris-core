@@ -19,6 +19,7 @@ add_library(${LIB} EXCLUDE_FROM_ALL ${static})
 target_link_libraries(
     ${LIB}
     stwf-utils
+    stwf-platform
 )
 target_include_directories(${LIB} PUBLIC
     ${ROOT_PATH}/include/hw
