@@ -43,3 +43,26 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D${EVM}")
 add_subdirectory(drivers)
 add_subdirectory(platform/${EVM})
 add_subdirectory(utils)
+
+# Link libraries to one
+set(LIB stwf)
+project(${LIB} C)
+
+file(GLOB static
+    dummy.c
+)
+
+add_library(${LIB} EXCLUDE_FROM_ALL ${static})
+target_link_libraries(
+    ${LIB}
+    --start-group
+    stwf-utils
+    stwf-platform
+    stwf-drivers
+    --end-group
+)
+target_include_directories(${LIB} PUBLIC
+    ${ROOT_PATH}/include/hw
+    ${ROOT_PATH}/include/${TARGET}/${DEVICE}
+    include
+)
